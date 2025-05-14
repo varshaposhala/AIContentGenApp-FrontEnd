@@ -1,0 +1,38 @@
+/* This will center everything inside the container div */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+
+.login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+h1{
+    font-weight:bolder;
+}
+button{
+    height:50px;
+    width:100px;
+    border-radius: 50px;
+    background-color: aquamarine;
+    font-weight: bolder;
+    cursor: pointer;
+}
+button:hover{
+     background-color:cadetblue;
+
+}
+input{
+    height: 30px;
+    width:150px;
+   
+}
