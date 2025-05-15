@@ -1,0 +1,41 @@
+
+*{
+margin:0;
+padding: 0;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1565D8;
+  padding: 10px 20px;
+  color: black;
+}
+
+.navbar-logo h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.navbar-actions button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+   border-radius: 5px;
+  transition: 0.3s;
+}
+
+.navbar-actions button:hover {
+  background-color:#afbed2;
+ 
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.4);
+
+}
+
+ 

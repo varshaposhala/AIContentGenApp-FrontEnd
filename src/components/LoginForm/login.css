@@ -19,7 +19,7 @@
 h1{
     font-weight:bolder;
 }
-button{
+.login-button{
     height:50px;
     width:100px;
     border-radius: 50px;
@@ -27,7 +27,7 @@ button{
     font-weight: bolder;
     cursor: pointer;
 }
-button:hover{
+.login-button:hover{
      background-color:cadetblue;
 
 }
