@@ -1,0 +1,93 @@
+.containerCA{
+height: auto;
+  width: auto;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+}
+.codeAnalysis{
+    margin:20px;
+ height:auto;
+ width:80vw;
+   border: 2px solid #000;
+     padding: 30px;
+   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+   border-radius: 5px;
+  transition: 0.3s;
+}
+.codeAnalysisLegand{
+ width: auto;
+     padding:5px;
+      text-align: center;
+     
+   font-weight: bold;
+}
+fieldset:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.4);
+}
+.itemsCA {
+   display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  gap: 30px;
+  width: auto;
+      
+
+}
+
+.itemCA {
+   padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 4px #888888;
+}
+.caBoxes{
+    width:auto;
+    font-size: small;
+    padding: 5px;
+}
+.caTextArea{
+    font-size: medium;
+    margin:20px 0px;
+    resize: vertical;
+    height:100px;
+    padding: 5px;
+    font-family: 'Times New Roman', Times, serif;
+}
+.btnWrapperCentered {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.fetchBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    border: none;
+    background-color:#1565D8;
+    color: white;
+}
+
+.fetchBtn:disabled {
+    cursor: not-allowed;
+}
+.fetchBtn:active{
+    transform: scale(0.95);          /* Slightly shrink the button */
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2); /* Inner shadow for pressed effect */
+  background-color: #0056b3;
+}
+
+.fetchBtn.disabledBtn:hover {
+   
+    background-color: #F8FAFC;
+    color: black;
+}
+.tag{
+    text-transform: uppercase;
+}
+

@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./login.css";
+
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
+    // 🔁 Redirect if already authenticated
+    useEffect(() => {
+        const accessToken = Cookies.get("accessToken");
+        if (accessToken) {
+            navigate("/"); // Redirect to home page
+        }
+    }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -24,13 +33,8 @@ const LoginForm = () => {
             }
 
             const data = await response.json();
-            console.log("Login successful:", data);
-            console.log("Access Token:", data.access);
-            console.log("Refresh Token:", data.refresh);
-
             Cookies.set("accessToken", data.access, { expires: 1 });
             Cookies.set("refreshToken", data.refresh, { expires: 7 });
-
 
             navigate("/");
         } catch (error) {
@@ -58,13 +62,11 @@ const LoginForm = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         /><br />
-
                         <button className="login-button" type="submit">Login</button>
                     </fieldset>
-                </div >
+                </div>
             </div>
         </form>
-
     );
 };
 

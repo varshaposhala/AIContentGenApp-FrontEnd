@@ -4,36 +4,15 @@ import Cookies from "js-cookie";
 import { authFetch } from "../../utils/authFetch";
 import { useAuthGuard } from "../../utils/useAuthGuard";
 import Navbar from "../Navbar/navbar"; // Adjust the path based on your structure
+
 import './home.css';
 
 const HomePage = () => {
     useAuthGuard();
-    const [message, setMessage] = useState("");
+
     const navigate = useNavigate();
 
-    const requestPrompt = async () => {
-        const response = await authFetch(
-            "https://ravik00111110.pythonanywhere.com/api/content-gen/prompt/",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ process_name: "ca_mcq_cpp" }),
-            },
-            navigate
-        );
 
-        if (!response) return;
-
-        if (response.status === 200) {
-            const data = await response.json();
-            console.log("Prompt Data:", data);
-            setMessage("Prompt fetched successfully!");
-        } else {
-            alert("Failed to fetch prompt.");
-        }
-    };
 
     const handleLogout = () => {
         Cookies.remove("accessToken");
@@ -55,7 +34,7 @@ const HomePage = () => {
 
                             <div className="Items">
                                 <button className="item">Theory MCQ</button>
-                                <button className="item">Code Analysis MCQ</button>
+                                <button className="item" onClick={() => navigate('../CodeAnalysis/codeAnalysis.js')}>Code Analysis MCQ</button>
                                 <button className="item">Theory With Psuedocode</button>
 
                             </div>
