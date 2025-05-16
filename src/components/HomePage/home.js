@@ -33,9 +33,11 @@ const HomePage = () => {
 
 
                             <div className="Items">
-                                <button className="item">Theory MCQ</button>
-                                <button className="item" onClick={() => navigate('../CodeAnalysis/codeAnalysis.js')}>Code Analysis MCQ</button>
-                                <button className="item">Theory With Psuedocode</button>
+
+                                <button className="item">Theoretical</button>
+                                <button className="item" onClick={() => navigate('../CodeAnalysis/codeAnalysis.js')}>Code Analysis</button>
+                                <button className="item">Theoretical with Code Snippet</button>
+
 
                             </div>
                         </fieldset>
