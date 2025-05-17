@@ -35,7 +35,7 @@ const HomePage = () => {
                             <div className="Items">
 
                                 <button className="item">Theoretical</button>
-                                <button className="item" onClick={() => navigate('../CodeAnalysis/codeAnalysis.js')}>Code Analysis</button>
+                                <button className="item" onClick={() => navigate('../CodeAnalysis')}>Code Analysis</button>
                                 <button className="item">Theoretical with Code Snippet</button>
 
 
