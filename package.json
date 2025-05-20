@@ -1,8 +1,8 @@
 {
-    "homepage": "https://varshaposhala.github.io/AIContentGenApp-FrontEnd/",
     "name": "content",
     "version": "0.1.0",
     "private": false,
+    "homepage": "https://varshaposhala.github.io/AIContentGenApp-FrontEnd/",
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
