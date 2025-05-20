@@ -3,6 +3,9 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import LoginForm from "./components/LoginForm/login";
 import Home from "./components/HomePage/home";
 import CodeAnalysis from "./components/CodeAnalysis/codeAnalysis";
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+</style>
 
 function App() {
     return (

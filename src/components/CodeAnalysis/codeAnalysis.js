@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { authFetch } from "../../utils/authFetch";
 import { useAuthGuard } from "../../utils/useAuthGuard";
+import { useEffect } from "react";
 import Navbar from "../Navbar/navbar";
 import './codeAnalysis.css';
+import { TextField } from "@mui/material";
 
 const CodeAnalysis = () => {
     useAuthGuard();
@@ -20,7 +22,11 @@ const CodeAnalysis = () => {
     const [syllabus, setSyllabus] = useState("");
     const [message, setMessage] = useState("");
     const [rawPrompt, setRawPrompt] = useState("");
-    const [loading, setLoading] = useState(false); // <-- added loading state
+    const [loading, setLoading] = useState(false);
+    const [questionsJson, setQuestionsJson] = useState([]);
+    useEffect(() => {
+        console.log("Updated questionsJson:", questionsJson);
+    }, [questionsJson]);// 👈 Added JSON state
 
     const techToProcessName = {
         CPP: "ca_mcq_cpp",
@@ -29,6 +35,21 @@ const CodeAnalysis = () => {
         C: "ca_mcq_c",
         Javascript: "ca_mcq_javascript",
         Sql: "ca_mcq_sql",
+    };
+    const getDifficultyCounts = () => {
+        const counts = { EASY: 0, MEDIUM: 0, HARD: 0 };
+        questionsJson.forEach(qStr => {
+            try {
+                const qObj = JSON.parse(qStr);
+                const diff = qObj.difficulty_level?.toUpperCase();
+                if (diff && counts.hasOwnProperty(diff)) {
+                    counts[diff]++;
+                }
+            } catch {
+                // ignore parse errors
+            }
+        });
+        return counts;
     };
 
     const allFieldsFilled = () => {
@@ -44,11 +65,8 @@ const CodeAnalysis = () => {
     const requestQuestions = async () => {
         if (!allFieldsFilled()) return;
 
-        setLoading(true);  // disable button here
-
+        setLoading(true);
         const currentPrompt = updateMessage(rawPrompt);
-        console.log("Questions generation logic...");
-        console.log(currentPrompt);
 
         try {
             const response = await authFetch(
@@ -58,24 +76,45 @@ const CodeAnalysis = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         prompt: currentPrompt,
-                        difficulty: difficulty,
+                        difficulty,
                         question_type: "MCQ",
-                        topic: topic,
+                        topic,
                         subtopic: subTopicTag,
                         number_of_question: numberOfQuestions
                     }),
                 },
                 navigate
             );
+
             const data = await response.json();
-            console.log("Received data:", data.message);
-            // handle your data here
+            console.log("Raw data.message:", data.message);
+
+            // Parse the stringified JSON array
+            let parsedQuestions;
+            try {
+                parsedQuestions = JSON.parse(data.message);
+            } catch (e) {
+                console.error("Failed to parse data.message", e);
+                parsedQuestions = [];
+            }
+
+            // Now parsedQuestions is an array of objects.
+            // If you want to store stringified individual objects in your state, do:
+            const stringifiedQuestions = parsedQuestions.map(q => JSON.stringify(q, null, 2));
+
+            // Append new questions as strings
+            setQuestionsJson(prev => [...prev, ...stringifiedQuestions]);
+            // console.log(questionsJson);
+
+
         } catch (error) {
             console.error("Error fetching questions:", error);
         } finally {
-            setLoading(false); // enable button again after completion
+            setLoading(false);
         }
     };
+
+
 
     const handleTechnologyChange = async (e) => {
         const value = e.target.value;
@@ -164,16 +203,26 @@ const CodeAnalysis = () => {
                             placeholder="Enter Number of Questions"
                             value={numberOfQuestions}
                             onChange={(e) => {
+                                // Allow only digits in the input value
                                 const newValue = e.target.value.replace(/[^0-9]/g, '');
                                 setNumberOfQuestions(newValue);
                                 updateMessage(rawPrompt, { number_of_questions: newValue });
                             }}
                             onKeyDown={(e) => {
-                                if (!/[0-9]/.test(e.key)) {
+                                // Allow digits (0-9) and Backspace key only
+                                if (
+                                    !/[0-9]/.test(e.key) &&
+                                    e.key !== 'Backspace' &&
+                                    e.key !== 'ArrowLeft' &&
+                                    e.key !== 'ArrowRight' &&
+                                    e.key !== 'Delete' &&
+                                    e.key !== 'Tab'
+                                ) {
                                     e.preventDefault();
                                 }
                             }}
                         />
+
 
 
                         <select className="itemCA1" value={difficulty} onChange={(e) => {
@@ -211,7 +260,7 @@ const CodeAnalysis = () => {
                         value={message}
                         onChange={(e) => {
                             const newTemplate = e.target.value;
-                            setRawPrompt(newTemplate);  // update the template
+                            setRawPrompt(newTemplate);
                             updateMessage(newTemplate);
                         }}
                     ></textarea>
@@ -220,13 +269,268 @@ const CodeAnalysis = () => {
                         <button
                             className={`itemCA fetchBtn ${!allFieldsFilled() || loading ? "disabledBtn" : ""}`}
                             onClick={requestQuestions}
-                            disabled={!allFieldsFilled() || loading} // disable button if loading
+                            disabled={!allFieldsFilled() || loading}
                         >
-                            {loading ? "Loading..." : "Generate Questions"}
+                            {loading ? "Generating..." : "Generate Questions"}
+                        </button>
+                        <button className="clearButton " onClick={() => setQuestionsJson([])}  >
+                            Clear Questions
                         </button>
                     </div>
 
+
+
                 </fieldset>
+                {questionsJson.length > 0 && (
+                    <div className="jsonDisplaySection">
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "12px",
+                            flexWrap: "wrap"
+                        }}>
+                            <h2 style={{ margin: 0 }}>Edit Generated Questions</h2>
+
+                            <div style={{
+                                backgroundColor: "#f1f3f5",
+                                borderRadius: "8px",
+                                padding: "6px 12px",
+                                fontSize: "0.9rem",
+                                display: "flex",
+                                gap: "12px",
+                                whiteSpace: "nowrap"
+                            }}>
+                                {(() => {
+                                    const counts = getDifficultyCounts();
+                                    return (
+                                        <>
+                                            <span style={{ color: "#28a745", fontWeight: "600" }}>Easy: {counts.EASY}</span>
+                                            <span style={{ color: "#ffc107", fontWeight: "600" }}>Medium: {counts.MEDIUM}</span>
+                                            <span style={{ color: "#dc3545", fontWeight: "600" }}>Hard: {counts.HARD}</span>
+                                        </>
+                                    );
+                                })()}
+                            </div>
+                        </div>
+
+                        {questionsJson.map((qStr, index) => {
+                            let questionObj;
+                            try {
+                                questionObj = JSON.parse(qStr);
+                            } catch {
+                                return <p key={index}>Invalid JSON</p>;
+                            }
+
+                            const handleFieldChange = (field, value) => {
+                                const updated = { ...questionObj, [field]: value };
+                                const updatedString = JSON.stringify(updated, null, 2);
+                                setQuestionsJson(prev => {
+                                    const copy = [...prev];
+                                    copy[index] = updatedString;
+                                    return copy;
+                                });
+                            };
+                            const handleDelete = (i) => {
+                                const newQuestions = questionsJson.filter((_, idx) => idx !== i);
+
+                                setQuestionsJson(newQuestions);
+
+                            };
+
+
+                            return (
+                                <div key={index} className="questionBox">
+                                    <div className="delete">
+                                        <select
+                                            value={questionObj.difficulty_level}
+                                            onChange={(e) => handleFieldChange("difficulty_level", e.target.value)}
+                                            className="difficulty"
+                                        >
+                                            <option value="">Select Difficulty</option>
+                                            <option value="EASY">Easy</option>
+                                            <option value="MEDIUM">Medium</option>
+                                            <option value="HARD">Hard</option>
+                                        </select>
+                                        <h4>QUESTION {index + 1}</h4>
+
+                                        <button onClick={() => handleDelete(index)}>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="30" height="20"
+                                                fill="red"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0v-6z" />
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1h-1v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4h-1a1 1 0 0 1 0-2h3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3a1 1 0 0 1 1 1zM5 4v9a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V4H5z" />
+                                            </svg>
+                                        </button>
+
+                                    </div>
+
+                                    <TextField
+                                        label="Question Text"
+                                        variant="outlined"
+                                        fullWidth
+                                        value={questionObj.question_text}
+                                        onChange={(e) => handleFieldChange("question_text", e.target.value)}
+                                        InputLabelProps={{
+                                            shrink: false,
+                                            sx: {
+                                                left: '50%',
+                                                transform: 'translateX(-50%) translateY(-50%)',
+                                                pointerEvents: 'none',
+                                                fontWeight: 'bold',
+                                                width: '100%',         // Make the label take up full width
+                                                textAlign: 'center',   // Center the text horizontally
+                                            },
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                textAlign: 'center',
+                                                border: 'none',        // Remove the border
+                                            },
+                                        }}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    border: 'none', // Remove the outline border
+                                                },
+                                            },
+                                        }}
+                                    />
+
+
+                                    <TextField
+                                        label="Code"
+                                        multiline
+                                        fullWidth
+                                        value={String(questionObj.code_data).trim()}
+                                        onChange={(e) => handleFieldChange("code_data", e.target.value)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            sx: {
+                                                textAlign: 'center',                         // Center the label
+                                                width: '100%',                               // Make label span full width
+                                                transform: 'translateX(-50%) translateY(-50%)', // Perfect center
+                                                left: '50%',
+                                                fontWeight: 'bold',                                 // For horizontal centering
+                                                bgcolor: 'white',                            // Background to cover border line
+                                                padding: '0 8px',                            // Space around label
+                                            },
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                overflow: 'hidden',
+                                                width: '100%',
+                                                padding: 0,
+                                                minHeight: '100px',
+                                                textAlign: 'left', // Align code to the left
+                                            },
+                                            onInput: (e) => {
+                                                e.target.style.height = 'auto';               // Reset height
+                                                e.target.style.height = e.target.scrollHeight + 'px'; // Adjust to content
+                                            },
+                                        }}
+                                        sx={{
+                                            marginTop: '20px', // Spacing above the field
+                                        }}
+                                        variant="outlined"
+                                    />
+
+                                    <TextField
+                                        label="Explanation"
+                                        multiline
+                                        fullWidth
+                                        value={String(questionObj.answer_explanation_content).trim()}
+                                        onChange={(e) => handleFieldChange("answer_explanation_content", e.target.value)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                            sx: {
+                                                textAlign: 'center',                         // Center the label
+                                                width: '100%',                               // Make label span full width
+                                                transform: 'translateX(-50%) translateY(-50%)', // Perfect center
+                                                left: '50%',
+                                                fontWeight: 'bold',                                 // For horizontal centering
+                                                bgcolor: 'white',                            // Background to cover border line
+                                                padding: '0 8px',                            // Space around label
+                                            },
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                overflow: 'hidden',
+                                                width: '100%',
+                                                padding: 0,
+                                                minHeight: '100px',
+                                                textAlign: 'left', // Align code to the left
+                                            },
+                                            onInput: (e) => {
+                                                e.target.style.height = 'auto';               // Reset height
+                                                e.target.style.height = e.target.scrollHeight + 'px'; // Adjust to content
+                                            },
+                                        }}
+                                        sx={{
+                                            marginTop: '20px',
+                                            marginBottom: '20px' // Spacing above the field
+                                        }}
+                                        variant="outlined"
+                                    />
+
+
+
+
+
+
+
+
+
+
+                                    <b>Options:</b>
+                                    {Object.entries(questionObj.options).map(([optionText, correctness], optIdx) => (
+                                        <div key={optIdx} className="optionRow">
+                                            <input
+                                                type="text"
+                                                value={optionText}
+                                                onChange={(e) => {
+                                                    const newKey = e.target.value;
+                                                    const newOptions = { ...questionObj.options };
+                                                    const value = newOptions[optionText];
+                                                    delete newOptions[optionText];
+                                                    newOptions[newKey] = value;
+                                                    handleFieldChange("options", newOptions);
+                                                }}
+                                                className="editableInput optionKey"
+                                            />
+                                            <select
+                                                value={correctness}
+                                                onChange={(e) => {
+                                                    const newOptions = { ...questionObj.options };
+                                                    newOptions[optionText] = e.target.value;
+                                                    handleFieldChange("options", newOptions);
+                                                }}
+                                                className="optionSelect"
+                                                style={{
+                                                    backgroundColor: correctness === "TRUE" ? "#d4edda" : "#f8d7da", // green for TRUE, red for FALSE
+                                                    border: "1px solid #ccc",
+                                                    borderRadius: "4px",
+                                                    margin: "8px 0 16px",
+                                                    height: "auto",
+                                                    padding: "5px 5px 0px 5px"
+
+                                                }}
+                                            >
+                                                <option value="TRUE">TRUE</option>
+                                                <option value="FALSE">FALSE</option>
+                                            </select>
+
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
             </div>
         </div>
     );
