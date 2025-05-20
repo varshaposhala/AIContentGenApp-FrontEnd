@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/AIContentGenApp-FrontEnd/static/css/main.64219b20.css",
-    "main.js": "/AIContentGenApp-FrontEnd/static/js/main.3c47949c.js",
+    "main.js": "/AIContentGenApp-FrontEnd/static/js/main.04f6a387.js",
     "index.html": "/AIContentGenApp-FrontEnd/index.html",
     "main.64219b20.css.map": "/AIContentGenApp-FrontEnd/static/css/main.64219b20.css.map",
-    "main.3c47949c.js.map": "/AIContentGenApp-FrontEnd/static/js/main.3c47949c.js.map"
+    "main.04f6a387.js.map": "/AIContentGenApp-FrontEnd/static/js/main.04f6a387.js.map"
   },
   "entrypoints": [
     "static/css/main.64219b20.css",
-    "static/js/main.3c47949c.js"
+    "static/js/main.04f6a387.js"
   ]
 }
