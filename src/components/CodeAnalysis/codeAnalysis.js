@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import Navbar from "../Navbar/navbar";
 import './codeAnalysis.css';
 import { TextField } from "@mui/material";
+import { v4 as uuidv4 } from 'uuid';
+import DownloadCSVButton from "../DownloadCSV/downloadCSV"
 
 const CodeAnalysis = () => {
     useAuthGuard();
@@ -76,10 +78,10 @@ const CodeAnalysis = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         prompt: currentPrompt,
-                        difficulty,
+                        difficulty: difficulty,
                         question_type: "MCQ",
-                        topic,
-                        subtopic: subTopicTag,
+                        topic: topicTag.toUpperCase(),
+                        subtopic: subTopicTag.toUpperCase(),
                         number_of_question: numberOfQuestions
                     }),
                 },
@@ -164,6 +166,7 @@ const CodeAnalysis = () => {
         });
 
         setMessage(updated);
+        console.log(updated);
         return updated;
     };
 
@@ -531,7 +534,18 @@ const CodeAnalysis = () => {
                     </div>
                 )}
 
+                <div style={{ padding: '20px' }}>
+                    <DownloadCSVButton
+                        questionJSONs={questionsJson}
+                        technology={technology}
+                        topicTag={topicTag}
+                        subTopicTag={subTopicTag}
+                    />
+
+                </div>
+
             </div>
+
         </div>
     );
 };
