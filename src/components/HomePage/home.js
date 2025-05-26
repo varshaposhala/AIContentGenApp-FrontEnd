@@ -1,7 +1,5 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { authFetch } from "../../utils/authFetch";
 import { useAuthGuard } from "../../utils/useAuthGuard";
 import Navbar from "../Navbar/navbar"; // Adjust the path based on your structure
 
