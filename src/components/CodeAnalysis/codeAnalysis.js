@@ -18,7 +18,7 @@ const CodeAnalysis = () => {
     const [numberOfQuestions, setNumberOfQuestions] = useState("");
     const [difficulty, setDifficulty] = useState("");
     const [topicTag, setTopicTag] = useState("");
-    const [subTopicTag, setSubTopicTag] = useState("");
+    const [subTopicTag, setSubTopicTag] = useState("SUB_TOPIC_");
     const [syllabus, setSyllabus] = useState("");
     const [message, setMessage] = useState("");
     const [rawPrompt, setRawPrompt] = useState("");
@@ -114,6 +114,11 @@ const CodeAnalysis = () => {
         }
     };
 
+    const handleTopicChange = (e) => {
+        console.log("Selected topic:", e.target.value);
+        setTopicTag(e.target.value);
+    }
+
 
 
     const handleTechnologyChange = async (e) => {
@@ -143,6 +148,8 @@ const CodeAnalysis = () => {
             alert("Failed to fetch prompt.");
         }
     };
+
+    
 
     const updateMessage = (template, overrides = {}) => {
         const replacements = {
@@ -179,18 +186,22 @@ const CodeAnalysis = () => {
                 <fieldset className="codeAnalysis">
                     <legend className="codeAnalysisLegand">Code Analysis Question</legend>
 
+                    <div className="details-text-prompt">
+                        <h3>-----  Details for Prompt  -----</h3>
+                    </div>
+
                     <div className="itemsCA">
                         <select className="itemCA1" value={technology} onChange={handleTechnologyChange}>
-                            <option value="default">Technology</option>
-                            <option value="CPP">CPP</option>
-                            <option value="Python">Python</option>
-                            <option value="Java">Java</option>
-                            <option value="C">C</option>
-                            <option value="Javascript">Javascript</option>
-                            <option value="Sql">Sql</option>
+                            <option value="default">Subject</option>
+                            <option value="C++">C++ Programming</option>
+                            <option value="Python">Python Programming</option>
+                            <option value="Java">Java Programming</option>
+                            <option value="C">C Programming</option>
+                            <option value="Javascript">Javascript Programming</option>
+                            <option value="Sql">SQL</option>
                         </select>
 
-                        <input type="text" className="caBoxes" placeholder="Enter Topic" value={topic} onChange={(e) => {
+                        <input type="text" className="caBoxes" placeholder="Enter Concept" value={topic} onChange={(e) => {
                             const newValue = e.target.value;
                             setTopic(newValue);
                             updateMessage(rawPrompt, { topic: newValue });
@@ -234,12 +245,22 @@ const CodeAnalysis = () => {
                             <option value="Medium">Medium</option>
                             <option value="Hard">Hard</option>
                         </select>
+                        
+                    </div>
+                    <div className="details-text">
+                            <h3>----- Details for topintech -----</h3>
+                    </div>
+                    <div className="topin-input">
+                        <select className="itemCA1" value={topicTag} onChange={handleTopicChange}>
+                            <option value="default">Choose Topic Tag</option>
+                            <option value="TOPIC_CPP_CODING_ANALYSIS">TOPIC_CPP_CODING_ANALYSIS</option>
+                            <option value="TOPIC_PYTHON_CODING_ANALYSIS">TOPIC_PYTHON_CODING_ANALYSIS</option>
+                            <option value="TOPIC_JAVA_CODING_ANALYSIS">TOPIC_JAVA_CODING_ANALYSIS</option>
+                            <option value="TOPIC_C_CODING_ANALYSIS">TOPIC_C_CODING_ANALYSIS</option>
+                            <option value="TOPIC_JS_CODING_ANALYSIS">TOPIC_JS_CODING_ANALYSIS</option>
+                            <option value="TOPIC_SQL_MCQS">TOPIC_SQL_MCQS</option>
+                        </select>
 
-                        <input type="text" className="caBoxes tag" placeholder="Enter Topic Tag" value={topicTag} onChange={(e) => {
-                            const newValue = e.target.value;
-                            setTopicTag(newValue);
-                            updateMessage(rawPrompt);
-                        }} />
                         <input type="text" className="caBoxes tag" placeholder="Enter Subtopic Tag" value={subTopicTag} onChange={(e) => {
                             const newValue = e.target.value;
                             setSubTopicTag(newValue);
