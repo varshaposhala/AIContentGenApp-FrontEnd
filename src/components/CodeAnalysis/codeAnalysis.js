@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { authFetch } from "../../utils/authFetch";
@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import Navbar from "../Navbar/navbar";
 import './codeAnalysis.css';
 import { TextField } from "@mui/material";
-import { v4 as uuidv4 } from 'uuid';
 import DownloadCSVButton from "../DownloadCSV/downloadCSV"
 
 const CodeAnalysis = () => {
@@ -15,7 +14,6 @@ const CodeAnalysis = () => {
     const navigate = useNavigate();
 
     const [technology, setTechnology] = useState("");
-    const [processName, setProcessName] = useState("");
     const [topic, setTopic] = useState("");
     const [numberOfQuestions, setNumberOfQuestions] = useState("");
     const [difficulty, setDifficulty] = useState("");
@@ -123,8 +121,6 @@ const CodeAnalysis = () => {
         setTechnology(value);
 
         const mappedProcessName = techToProcessName[value];
-        setProcessName(mappedProcessName);
-
         if (!mappedProcessName) return;
 
         const response = await authFetch(
