@@ -8,11 +8,11 @@ export const getTokens = () => ({
 });
 
 export const setTokens = (access, refresh = null) => {
-    const accessExpiry = new Date(Date.now() + 1 * 60 * 1000); // 1 minute
+    const accessExpiry = new Date(Date.now() + 30 * 60 * 1000); // 30 minute
     Cookies.set("accessToken", access, { expires: accessExpiry });
 
     if (refresh) {
-        const refreshExpiry = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
+        const refreshExpiry = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
         Cookies.set("refreshToken", refresh, { expires: refreshExpiry });
     }
 };

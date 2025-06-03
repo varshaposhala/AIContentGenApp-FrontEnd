@@ -42,9 +42,19 @@ const HomePage = () => {
                     </div>
                     <div className="Section">
                         <fieldset>
-                            <legend>Coding</legend>
+                            <legend>Coding Curation</legend>
                             <div className="Items">
-                                <button className="item">Python Coding</button>
+                                <button className="item">Coding</button>
+                                <button className="item">Web Coding</button>
+                                <button className="item">SQL Coding</button>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div className="Section">
+                        <fieldset>
+                            <legend>Coding Replication</legend>
+                            <div className="Items">
+                                <button className="item"  onClick={()=> navigate('../Coding')}>Coding</button>
                                 <button className="item">Web Coding</button>
                                 <button className="item">SQL Coding</button>
                             </div>
