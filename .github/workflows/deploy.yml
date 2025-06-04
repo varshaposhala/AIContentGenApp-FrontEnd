@@ -31,5 +31,5 @@ jobs:
       with:
         branch: gh-pages  # The branch where your app will be deployed
         folder: build  # The folder containing the production build (usually "build")
-        token: ${{ secrets.GITHUB_TOKEN }}  # Token to authenticate with GitHub (provided by default)
+        token: ${{ secrets.GH_TOKEN }}  # Token to authenticate with GitHub (provided by default)
  
