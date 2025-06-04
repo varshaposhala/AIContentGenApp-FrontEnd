@@ -1,28 +1,35 @@
-name: Deploy React App
+name: Deploy React App to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the workflow when there is a push to the main branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     env:
-      CI: false  # Disable treating warnings as errors
+      CI: false
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout the code
+      uses: actions/checkout@v2  # Check out the code from your repository
 
-      - name: Install Dependencies
-        run: npm install
+    - name: Set up Node.js
+      uses: actions/setup-node@v2  # Set up Node.js environment
+      with:
+        node-version: '14'  # Use Node.js version 14 or any other version
 
-      - name: Build Project
-        run: npm run build
+    - name: Install dependencies
+      run: npm install  # Install dependencies from package.json
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: build
+    - name: Build the app
+      run: npm run build  # Create a production build of the app
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4  # Action to deploy to GitHub Pages
+      with:
+        branch: gh-pages  # The branch where your app will be deployed
+        folder: build  # The folder containing the production build (usually "build")
+        token: ${{ secrets.GITHUB_TOKEN }}  # Token to authenticate with GitHub (provided by default)
+ 
