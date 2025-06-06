@@ -1,4 +1,3 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag }) => {
@@ -25,12 +24,11 @@ const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag })
             'multimedia_url',
             'thumbnail_url',
             'tag_names',
-            'options_content_type',
-            'code_language',
-            'code_data',
             'c_options',
             'w_options',
-            'difficulty_level',
+            'options_content_type',
+            'code_data',
+            'code_language',           
             'explanation',
             'explanation_content_type',
             'toughness'
@@ -54,7 +52,7 @@ const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag })
             const short_text = '';
             const question_key = index;
 
-            const content_type = 'TEXT';
+            const content_type = 'HTML';
             const multimedia_count = 0;
             const multimedia_format = '';
             const multimedia_url = '';
@@ -70,8 +68,8 @@ const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag })
                 question_id
             ].filter(Boolean).join('\n');
 
-            const options_content_type = 'TEXT';
-            const explanation_content_type = 'TEXT';
+            const options_content_type = 'MARKDOWN';
+            const explanation_content_type = 'MARKDOWN';
             const code_language = technology;
             const toughness = difficulty_level;
 
@@ -79,8 +77,8 @@ const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag })
             const w_options = [];
 
             Object.entries(options || {}).forEach(([key, val]) => {
-                if (val === 'TRUE') c_options.push(key);
-                else w_options.push(key);
+                if (val === 'TRUE') c_options.push(`OPTION : ${key}`);
+                else w_options.push(`OPTION: ${key}`);
             });
 
             const row = [
@@ -95,12 +93,11 @@ const DownloadCSVButton = ({ questionJSONs, technology, topicTag, subTopicTag })
                 multimedia_url,
                 thumbnail_url,
                 escapeCSV(tag_names),
-                options_content_type,
-                escapeCSV(code_language),
-                escapeCSV(code_data),
                 escapeCSV(c_options.join('\n')),
                 escapeCSV(w_options.join('\n')),
-                escapeCSV(difficulty_level),
+                options_content_type,
+                escapeCSV(code_data),
+                escapeCSV(code_language),
                 escapeCSV(answer_explanation_content),
                 explanation_content_type,
                 toughness

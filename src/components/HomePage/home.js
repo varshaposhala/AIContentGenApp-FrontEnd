@@ -1,7 +1,5 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { authFetch } from "../../utils/authFetch";
 import { useAuthGuard } from "../../utils/useAuthGuard";
 import Navbar from "../Navbar/navbar"; // Adjust the path based on your structure
 
@@ -44,9 +42,19 @@ const HomePage = () => {
                     </div>
                     <div className="Section">
                         <fieldset>
-                            <legend>Coding</legend>
+                            <legend>Coding Curation</legend>
                             <div className="Items">
-                                <button className="item">Python Coding</button>
+                                <button className="item">Coding</button>
+                                <button className="item">Web Coding</button>
+                                <button className="item">SQL Coding</button>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div className="Section">
+                        <fieldset>
+                            <legend>Coding Replication</legend>
+                            <div className="Items">
+                                <button className="item"  onClick={()=> navigate('../Coding')}>Coding</button>
                                 <button className="item">Web Coding</button>
                                 <button className="item">SQL Coding</button>
                             </div>

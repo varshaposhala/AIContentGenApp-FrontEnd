@@ -1,10 +1,16 @@
-import React from 'react';
 import './navbar.css'; // Link your CSS file here
+import { useNavigate } from "react-router-dom";
+
+
 
 const Navbar = ({ handleLogout }) => {
+    const navigate = useNavigate();
+    const handleLogoClick = () => {
+        navigate("/"); // Navigate to the home page or desired route
+    };
     return (
         <nav className="navbar">
-            <div className="navbar-logo">
+            <div className="navbar-logo" onClick={handleLogoClick}>
                 <h2>MyApp</h2>
             </div>
             <div className="navbar-actions">
