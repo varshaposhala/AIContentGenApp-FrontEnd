@@ -11,7 +11,7 @@ const Navbar = ({ handleLogout }) => {
     return (
         <nav className="navbar">
             <div className="navbar-logo" onClick={handleLogoClick}>
-                <h2>MyApp</h2>
+                <h2>Content Loop</h2>
             </div>
             <div className="navbar-actions">
                 <button onClick={handleLogout}>Logout</button>

@@ -30,6 +30,7 @@ const Theoretical = () => {
         C: "ca_mcq_c",
         Javascript: "ca_mcq_javascript",
         Sql: "ca_mcq_sql",
+        HTML_CSS: "theory_mcq_html_css"
     };
 
     const getDifficultyCounts = () => {
@@ -115,6 +116,13 @@ const Theoretical = () => {
         setTechnology(value);
 
         const mappedProcessName = techToProcessName[value];
+        console.log("Selected technology:", value);
+        console.log("Mapped process name:", mappedProcessName);
+
+        if (!mappedProcessName) {
+            console.error("No mapping found for technology:", value);
+            return;
+        }
         if (!mappedProcessName) return;
 
         const response = await authFetch(
@@ -290,6 +298,7 @@ const Theoretical = () => {
                             <option value="C">C</option>
                             <option value="Javascript">Javascript</option>
                             <option value="Sql">Sql</option>
+                            <option value="HTML_CSS">HTML_CSS</option>
                         </select>
 
                         <input
@@ -351,12 +360,9 @@ const Theoretical = () => {
                     <div className="topin-input">
                         <select className="itemCA1" value={topicTag} onChange={handleTopicChange}>
                             <option value="default">Choose Topic Tag</option>
-                            <option value="TOPIC_CPP_CODING_ANALYSIS">TOPIC_CPP_MCQ</option>
-                            <option value="TOPIC_PYTHON_CODING_ANALYSIS">TOPIC_PYTHON_MCQ</option>
-                            <option value="TOPIC_JAVA_CODING_ANALYSIS">TOPIC_JAVA_MCQ</option>
-                            <option value="TOPIC_C_CODING_ANALYSIS">TOPIC_C_MCQ</option>
-                            <option value="TOPIC_JS_CODING_ANALYSIS">TOPIC_JS_MCQ</option>
-                            <option value="TOPIC_SQL_MCQS">TOPIC_SQL_MCQS</option>
+
+                            <option value="TOPIC_HTML_CSS_MCQ">TOPIC_HTML_CSS_MCQ
+                            </option>
                         </select>
 
                         <input
