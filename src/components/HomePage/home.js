@@ -32,7 +32,7 @@ const HomePage = () => {
 
                             <div className="Items">
 
-                                <button className="item">Theoretical</button>
+                                <button className="item" onClick={() => navigate('../Theoretical')}>Theoretical</button>
                                 <button className="item" onClick={() => navigate('../CodeAnalysis')}>Code Analysis</button>
                                 <button className="item">Theoretical with Code Snippet</button>
 
@@ -54,7 +54,7 @@ const HomePage = () => {
                         <fieldset>
                             <legend>Coding Replication</legend>
                             <div className="Items">
-                                <button className="item"  onClick={()=> navigate('../Coding')}>Coding</button>
+                                <button className="item" onClick={() => navigate('../Coding')}>Coding</button>
                                 <button className="item">Web Coding</button>
                                 <button className="item">SQL Coding</button>
                             </div>
